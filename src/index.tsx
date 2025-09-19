@@ -7,18 +7,25 @@ import App from "./app"
 import FontDosis from "./fonts/dosis"
 
 import "./index.css"
+import { ContextAssets, loadAssets } from "./assets"
 
 async function start() {
-    FontDosis.load300()
-    FontDosis.load700()
+    const promiseFonts = Promise.all([FontDosis.load300(), FontDosis.load700()])
+    await promiseFonts
+    console.log("Fonts loaded!")
+    const assets = await loadAssets()
+    console.log("Assets loaded!")
     const container = document.getElementById("app")
     if (!container) throw Error("Missing element with id #app!")
-    createRoot(container).render(<MainPage />)
-
+    createRoot(container).render(
+        <ContextAssets.Provider value={assets}>
+            <MainPage />
+        </ContextAssets.Provider>
+    )
     const splash = document.getElementById("tgd-logo")
     if (splash) {
-        // splash.classList.add("vanish")
-        // window.setTimeout(() => splash.parentNode?.removeChild(splash), 1000)
+        splash.classList.add("vanish")
+        window.setTimeout(() => splash.parentNode?.removeChild(splash), 1000)
     }
 }
 

@@ -1,83 +1,38 @@
-interface AssetsURLs {
-    [id: string]: string
-}
+import React from "react"
+import { TgdDataGlb, tgdLoadAssets } from "@tolokoban/tgd"
 
-type Asset = HTMLImageElement | HTMLAudioElement | string
+import GridURL from "@/assets/grid.glb"
+import SkullURL from "@/assets/skull.glb"
+import BackgroundURL from "@/assets/background.webp"
 
 export interface Assets {
-    [id: string]: Asset
-}
-
-export async function fetchAssets(
-    assetsURLs: AssetsURLs,
-    onProgress: (percentage: number) => void
-): Promise<Assets> {
-    const assets: Assets = {}
-    onProgress(0)
-    const ids = Object.keys(assetsURLs)
-    let count = 0
-    for (const id of ids) {
-        count++
-        onProgress(count / ids.length)
-        const url = assetsURLs[id]
-        const asset = await fetchAsset(url)
-        if (asset) assets[id] = asset
+    glb: {
+        grid: TgdDataGlb
+        skull: TgdDataGlb
     }
-    onProgress(1)
-    return assets
+    img: {
+        background: HTMLImageElement
+    }
 }
 
-const loadedAudio = new Set<HTMLAudioElement>()
-
-export async function fetchAsset(url: string): Promise<Asset | undefined> {
-    return new Promise(async (resolve) => {
-        try {
-            if (hasExtension(url, "jpg", "png", "gif", "svg")) {
-                const img = new Image()
-                img.crossOrigin = "anonymous"
-                img.onload = () => resolve(img)
-                img.onerror = function (ex) {
-                    console.error('Unable to load image "' + url + '":', url)
-                    console.error(ex)
-                    resolve(undefined)
-                }
-                img.src = url
-            } else if (hasExtension(url, "ogg", "wav", "mp3")) {
-                const audio = document.createElement("audio")
-                const slot = function () {
-                    if (loadedAudio.has(audio)) return
-
-                    loadedAudio.add(audio)
-                    resolve(audio)
-                }
-                audio.addEventListener("canplay", slot)
-                audio.addEventListener("loadeddata", slot)
-                window.setTimeout(slot, 3000)
-                audio.addEventListener("error", function (ex) {
-                    console.error('Unable to load sound "' + url + '":', url)
-                    console.error(ex)
-                    resolve(undefined)
-                })
-                audio.src = url
-                console.log("Loading audio: ", url)
-            } else {
-                const response = await fetch(url)
-                resolve(
-                    hasExtension(url, "json")
-                        ? response.json()
-                        : response.text()
-                )
-            }
-        } catch (ex) {
-            console.error(`Unable to load "${url}"!`, ex)
-            resolve(undefined)
-        }
+export function loadAssets(): Promise<Assets> {
+    return tgdLoadAssets({
+        glb: {
+            grid: GridURL,
+            skull: SkullURL,
+        },
+        img: {
+            background: BackgroundURL,
+        },
     })
 }
 
-function hasExtension(name: string, ...extensions: string[]): boolean {
-    for (const ext of extensions) {
-        if (name.endsWith(`.${ext}`)) return true
+export const ContextAssets = React.createContext<Assets | null>(null)
+
+export function useAssets(): Assets {
+    const assets = React.useContext(ContextAssets)
+    if (!assets) {
+        throw new Error("Assets have not been loaded yet!")
     }
-    return false
+    return assets
 }

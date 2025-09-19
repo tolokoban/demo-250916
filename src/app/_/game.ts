@@ -1,5 +1,6 @@
 import {
     tgdActionCreateCameraInterpolation,
+    tgdCalcDegToRad,
     TgdCameraPerspective,
     TgdContext,
     TgdControllerCameraOrbit,
@@ -12,8 +13,13 @@ import {
     TgdQuat,
     webglPresetDepth,
 } from "@tolokoban/tgd"
+import { PainterSkullNormalMap } from "./painters/skull-normal-map"
+import { PainterBackground } from "./painters/background"
+import { useAssets } from "@/assets"
+import { PainterSkullDepth } from "./painters/skull-depth"
 
 export function useGameHandler() {
+    const assets = useAssets()
     return (canvas: HTMLCanvasElement | null) => {
         if (!canvas) return
 
@@ -22,45 +28,33 @@ export function useGameHandler() {
                 distance: 3,
                 position: [0, 0, 0],
             },
-            far: 1000,
-            near: 0.1,
+            far: 5,
+            near: 1,
             fovy: Math.PI / 4,
-            zoom: 0.1,
         })
         const context = new TgdContext(canvas, { camera })
-        const state = new TgdPainterState(context, {
-            depth: webglPresetDepth.lessOrEqual,
-            children: [
-                new TgdPainterClear(context, {
-                    color: [0, 0, 0, 1],
-                    depth: 1,
-                }),
-            ],
+        const skullNormalMap = new PainterSkullNormalMap(context, {
+            asset: assets.glb.skull,
         })
-        context.add(state)
-        const geometry = new TgdGeometryBox()
-        const material = new TgdMaterialNormals()
-        const mesh = new TgdPainterMesh(context, {
-            geometry,
-            material,
+        const skullDepth = new PainterSkullDepth(context, {
+            asset: assets.glb.skull,
         })
-        state.add(mesh)
-        context.animSchedule({
-            action: tgdActionCreateCameraInterpolation(context.camera, {
-                zoom: 1,
-                orientation: new TgdQuat()
-                    .face("+Y+Z+X")
-                    .rotateAroundX(Math.random())
-                    .rotateAroundY(Math.random()),
-            }),
-            duration: 1.5,
-            easingFunction: tgdEasingFunctionOutBack,
-            onEnd() {
-                new TgdControllerCameraOrbit(context, {
-                    inertiaOrbit: 900,
-                })
+        const background = new PainterBackground(context, {
+            background: assets.img.background,
+            normalMap: skullNormalMap.texture,
+            depth: skullDepth.texture,
+        })
+        context.add(skullNormalMap, skullDepth, background)
+        context.play()
+
+        new TgdControllerCameraOrbit(context, {
+            geo: {
+                minLat: tgdCalcDegToRad(-20),
+                maxLat: tgdCalcDegToRad(+20),
+                minLng: tgdCalcDegToRad(-60),
+                maxLng: tgdCalcDegToRad(+60),
             },
+            inertiaOrbit: 3000,
         })
-        context.paint()
     }
 }

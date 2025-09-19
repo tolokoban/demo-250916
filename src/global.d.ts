@@ -49,6 +49,11 @@ declare module "*.frag" {
     export = value
 }
 
+declare module "*.glb" {
+    const value: string
+    export = value
+}
+
 declare module "*.md" {
     const value: string
     export = value
