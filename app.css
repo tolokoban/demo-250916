@@ -1,0 +1,186 @@
+
+@font-face {
+  font-family: dosis;
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(fnt/dosis-0.69deb014a5ba4410917f.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+1EA0-1EF9, U+20AB;
+}
+
+@font-face {
+  font-family: dosis;
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(fnt/dosis-1.8aed9cf3ef8fa3238475.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: dosis;
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(fnt/dosis-2.171bc766a504fe0ff63d.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: dosis;
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fnt/dosis-3.e2f092835a98aff60bf2.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+1EA0-1EF9, U+20AB;
+}
+
+@font-face {
+  font-family: dosis;
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fnt/dosis-4.0951d39bf3e77057a881.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: dosis;
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fnt/dosis-5.c9822e12d95e00c0e642.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+body,
+html {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body > canvas#canvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    margin: 0;
+    background-color: #000;
+}
+
+#tgd-logo.vanish {
+    --duration: 900ms;
+    transition: all var(--duration);
+    opacity: 0;
+}
+
+#tgd-logo > progress {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    height: 1rem;
+    margin-top: -0.5rem;
+    width: calc(100% - 2rem);
+    box-shadow: 0 0 1rem .5rem #0007;
+    overflow: visible;
+}
+
+:root {
+    --theme-color-screen: #321;
+    --theme-color-primary: #d70;
+    --theme-color-primary-light: #f92;
+    --theme-color-primary-dark: #740;
+}
+
+progress[value] {
+    box-sizing: border-box;
+    margin: 1rem 0;
+    appearance: none;
+    border: none;
+    height: 0.5rem;
+    background-image: linear-gradient(
+            to top,
+            transparent,
+            transparent 50%,
+            #fff7 50%,
+            #fff7
+        ),
+        linear-gradient(var(--theme-color-screen), var(--theme-color-screen));
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem #0007 inset, 0 -0.125rem 0.25rem #fff7 inset;
+    position: relative;
+    overflow: hidden;
+}
+
+progress[value]::-webkit-progress-bar {
+    background-image: linear-gradient(
+            to top,
+            transparent,
+            transparent 50%,
+            #fff7 50%,
+            #fff7
+        ),
+        linear-gradient(var(--theme-color-screen), var(--theme-color-screen));
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem #0007 inset, 0 -0.125rem 0.25rem #fff7 inset;
+}
+
+progress[value]::-webkit-progress-value {
+    background-size: 100% 100%, 1.5rem 1rem, 100% 100%;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0.5rem var(--theme-color-primary);
+    background-image: linear-gradient(
+            to top,
+            transparent,
+            transparent 50%,
+            #fff7 50%,
+            #fff7
+        ),
+        linear-gradient(
+            135deg,
+            transparent,
+            transparent 33%,
+            #0002 33%,
+            #0002 66%,
+            transparent 66%
+        ),
+        linear-gradient(
+            to top,
+            var(--theme-color-primary-light),
+            var(--theme-color-primary-dark)
+        );
+}
+
+progress[value]::-moz-progress-bar {
+    background-image: linear-gradient(
+            to top,
+            transparent,
+            transparent 50%,
+            #fff7 50%,
+            #fff7
+        ),
+        linear-gradient(
+            135deg,
+            transparent,
+            transparent 33%,
+            #0002 33%,
+            #0002 66%,
+            transparent 66%
+        ),
+        linear-gradient(
+            to top,
+            var(--theme-color-primary-light),
+            var(--theme-color-primary-dark)
+        );
+    background-size: 100% 100%, 1.5rem 1rem, 100% 100%;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 .5rem .5rem #ff8e;
+}
+
