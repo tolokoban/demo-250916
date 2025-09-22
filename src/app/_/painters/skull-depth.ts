@@ -44,7 +44,7 @@ export class PainterSkullDepth extends TgdPainter {
             painterState,
         ])
         const painterFramebuffer = new TgdPainterFramebuffer(context, {
-            viewportMatchingScale: 1,
+            viewportMatchingScale,
             depthBuffer: true,
             textureColor0: new TgdTexture2D(context),
             children: [painterGroup],

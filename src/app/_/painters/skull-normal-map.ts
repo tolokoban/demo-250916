@@ -19,6 +19,7 @@ import {
 
 import URL from "@/assets/skull.glb"
 import { animate } from "./animation"
+import { viewportMatchingScale } from "./consts"
 
 export class PainterSkullNormalMap extends TgdPainter {
     public readonly texture: TgdTexture2D
@@ -45,7 +46,7 @@ export class PainterSkullNormalMap extends TgdPainter {
             painterState,
         ])
         const painterFramebuffer1 = new TgdPainterFramebuffer(context, {
-            viewportMatchingScale: 0.25,
+            viewportMatchingScale,
             depthBuffer: true,
             textureColor0: new TgdTexture2D(context),
             children: [painterGroup],
@@ -69,7 +70,7 @@ export class PainterSkullNormalMap extends TgdPainter {
             flipY: true,
         })
         const painterFramebuffer2 = new TgdPainterFramebuffer(context, {
-            viewportMatchingScale: 0.25,
+            viewportMatchingScale,
             depthBuffer: false,
             textureColor0: new TgdTexture2D(context),
             children: [painterFilter],
